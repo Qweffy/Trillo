@@ -1,33 +1,39 @@
-//////////////////////////////////////////////////////
-// logo
+// LOGO
 .logo {
   height: 3.25rem;
-  margin-left: 3rem;
+  margin-left: 2rem;
 }
 
-//////////////////////////////////////////////////////
-// search
-
+// SEARCH
 .search {
   flex: 0 0 40%;
+  // Although this is flex item, it can become flex container (nesting)
   display: flex;
+  // Cross axis
   align-items: center;
+  // Main axis
   justify-content: center;
+
   @media only screen and (max-width: $bp-smallest) {
+    // Change order to be the last one element and it will move to the end
     order: 1;
+    // No grow, no shrink, take 100% on this breakpoint
     flex: 0 0 100%;
+    background-color: var(--color-grey-light-2);
   }
 
   &__input {
+    // Input element doesn't inherit global font settings, so it has to be explicitly set to inherit
     font-family: inherit;
     font-size: inherit;
-    background-color: var(--color-grey-light-2);
     color: inherit;
+    background-color: var(--color-grey-light-2);
     border: none;
     padding: 0.7rem 2rem;
     border-radius: 100px;
     width: 90%;
     transition: all 0.2s;
+    // To go inside input
     margin-right: -3.25rem;
 
     &:focus {
@@ -36,19 +42,23 @@
       background-color: var(--color-grey-light-3);
     }
 
+    // Select placeholder, works only for webkit browsers
     &::-webkit-input-placeholder {
       font-weight: 100;
       color: var(--color-grey-light-4);
     }
   }
 
+  // Select adjacent sibling
   &__input:focus + &__button {
+    // Button to have same background-color as sibling input
     background-color: var(--color-grey-light-3);
   }
 
   &__button {
     border: none;
     background-color: var(--color-grey-light-2);
+
     &:focus {
       outline: none;
     }
@@ -61,18 +71,20 @@
   &__icon {
     height: 2rem;
     width: 2rem;
+    // Change color of svg icon
     fill: var(--color-grey-dark-3);
   }
 }
 
-//////////////////////////////////////////////////////
-// user navigation
-
+// USER NAVIGATION
 .user-nav {
+  align-self: stretch;
+  // Turn it into flex container
   display: flex;
   align-items: center;
-  align-self: stretch;
+  position: relative;
 
+  // All direct children of user-nav
   & > * {
     padding: 0 2rem;
     cursor: pointer;
@@ -88,9 +100,10 @@
   &__icon-box {
     position: relative;
   }
+
   &__icon {
-    height: 2.25rem;
-    width: 2.25rem;
+    height: 2.5rem;
+    width: 2.5rem;
     fill: var(--color-grey-dark-2);
   }
 
@@ -104,6 +117,8 @@
     position: absolute;
     top: 1.5rem;
     right: 1.1rem;
+
+    // Flexbox can work with texts just as with elements
     display: flex;
     justify-content: center;
     align-items: center;
@@ -114,35 +129,82 @@
     border-radius: 50%;
     margin-right: 1rem;
   }
-}
 
-///////////////////////////////////////////////
-// side navitagtion
-
-.side-nav {
-  font-size: 1.4rem;
-  list-style: none;
-  margin-top: 3.5rem;
-
-  @media only screen and (max-width: $bp-medium) {
+  // Dropdown for user options/account
+  &__user-menu,
+  &__user-menu-messages {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    height: 0;
     display: flex;
-    margin: 0;
+    flex-direction: column;
+    overflow: hidden;
+    background-color: var(--color-grey-dark-1);
+    color: #fff;
+    transition: transform 0.2s, height 0.4s cubic-bezier(1, 0, 0, 1) 0.2s,
+      background-color 0.1s;
+    z-index: 100;
   }
 
-  &__item {
-    position: relative;
-    &:not(:last-child) {
-      margin-bottom: 0.5rem;
-      @media only screen and (max-width: $bp-medium) {
-        margin: 0;
+  &__user-menu-messages {
+    border-radius: 10px;
+    width: 180px;
+    right: -86%;
+    list-style: none;
+    font-size: 1.2rem;
+
+    @media only screen and (max-width: $bp-medium) {
+      background-color: var(--color-grey-dark-3);
+    }
+  }
+
+  &__user:hover &__user-menu {
+    height: 18.3rem;
+  }
+
+  &__icon-box:hover &__user-menu-messages {
+    height: 7rem;
+  }
+
+  &__message {
+    padding: 0.5rem 1rem 0.5rem 2.5rem;
+    margin: 0 0.5rem;
+    border-bottom: var(--line);
+    display: flex;
+
+    & img {
+      width: 2rem;
+      height: 2rem;
+    }
+
+    &:last-child {
+      border-bottom: none;
+      padding: 1rem;
+      font-weight: 800;
+      transition: all 0.2s;
+
+      &:hover {
+        color: var(--color-primary);
       }
     }
-    @media only screen and (max-width: $bp-medium) {
-      flex: 1;
+  }
+
+  &__user-option {
+    list-style: none;
+    padding: 1rem 2rem;
+    position: relative;
+
+    &:first-child {
+      background-color: var(--color-primary);
+    }
+
+    &:not(:last-child) {
+      margin-bottom: 0.5rem;
     }
   }
 
-  &__item::before {
+  &__user-option::before {
     content: "";
     position: absolute;
     top: 0;
@@ -155,9 +217,145 @@
       background-color 0.1s;
   }
 
+  &__user-option:hover::before,
+  &__user-option--active::before {
+    transform: scaleY(1);
+    // On expand take full width
+    width: 100%;
+  }
+
+  &__user-option:active::before {
+    background-color: var(--color-primary-light);
+  }
+
+  &__user-link {
+    text-decoration: none;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    position: relative;
+  }
+
+  &__user-icon {
+    width: 1.75rem;
+    height: 1.75rem;
+    margin-right: 2rem;
+    fill: currentColor;
+  }
+}
+
+.pulsating-circle {
+  position: absolute;
+  left: 8%;
+  top: 20%;
+  transform: translateX(-50%) translateY(-50%);
+  width: 0.7rem;
+  height: 0.7rem;
+
+  &:before {
+    content: "";
+    position: relative;
+    display: block;
+    width: 300%;
+    height: 300%;
+    box-sizing: border-box;
+    margin-left: -100%;
+    margin-top: -100%;
+    border-radius: 45px;
+    background-color: var(--color-primary);
+    animation: pulse-ring 1.25s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+  }
+
+  &:after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    background-color: var(--color-grey-dark-1);
+    border-radius: 15px;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+    animation: pulse-dot 1.25s cubic-bezier(0.455, 0.03, 0.515, 0.955) -0.4s infinite;
+  }
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.63);
+  }
+  80%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes pulse-dot {
+  0% {
+    transform: scale(0.8);
+  }
+  50% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0.8);
+  }
+}
+
+// SIDE NAVIGATION
+.side-nav {
+  font-size: 1.4rem;
+  list-style: none;
+  margin-top: 3.5rem;
+
+  @media only screen and (max-width: $bp-medium) {
+    // Put items side by side on this breakpoint
+    display: flex;
+    margin: 0;
+  }
+
+  &__item {
+    position: relative;
+
+    &:not(:last-child) {
+      margin-bottom: 0.5rem;
+
+      @media only screen and (max-width: $bp-medium) {
+        margin: 0;
+      }
+    }
+
+    @media only screen and (max-width: $bp-medium) {
+      // Give all flex items the ability to grow
+      flex: 1;
+    }
+  }
+
+  // Show before item, positioned in relation to item element
+  &__item::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    // Initial width
+    width: 3px;
+    background-color: var(--color-primary);
+    // In normal state it has to be set to 0, so nothing will be visible
+    transform: scaleY(0);
+    // Set 0.2s time for transform to happen, and it will wait 0.2s (fourth argument)
+    // for width animation to happen (which takes 0.4s)
+    // cubic-bezier is animation timing and speed (found at cubic-bezier site) for width
+    transition: transform 0.2s, width 0.4s cubic-bezier(1, 0, 0, 1) 0.2s,
+      background-color 0.1s;
+  }
+
   &__item:hover::before,
   &__item--active::before {
+    // Add 1 to scaleY on hover state, to grow 100% in Y direction
     transform: scaleY(1);
+    // On expand take full width
     width: 100%;
   }
 
@@ -172,15 +370,21 @@
     text-transform: uppercase;
     display: block;
     padding: 1.5rem 3rem;
+    // Added only for z-index to work
     position: relative;
     z-index: 10;
+
     display: flex;
     align-items: center;
+
     @media only screen and (max-width: $bp-medium) {
+      // Center all items for this breakpoint
       justify-content: center;
       padding: 2rem;
     }
+
     @media only screen and (max-width: $bp-small) {
+      // Change direction for this breakpoint
       flex-direction: column;
       padding: 1.5rem 0.5rem;
     }
@@ -190,7 +394,9 @@
     width: 1.75rem;
     height: 1.75rem;
     margin-right: 2rem;
+    // currentColor is the color of the current element or the parent element
     fill: currentColor;
+
     @media only screen and (max-width: $bp-small) {
       margin-right: 0;
       margin-bottom: 0.7rem;
@@ -200,37 +406,82 @@
   }
 }
 
-/////////////////////////////////////
 // LEGAL TEXT
-
 .legal {
   font-size: 1.2rem;
   color: var(--color-grey-light-4);
   text-align: center;
   padding: 2.5rem;
+
   @media only screen and (max-width: $bp-medium) {
+    // Remove legal text on this breakpoint
     display: none;
   }
 }
 
-////////////////////////////////////////////
-// gallery
-
+// GALLERY
 .gallery {
   display: flex;
+
+  @media only screen and (max-width: $bp-smallest) {
+    flex-direction: column;
+  }
+
+  &__item {
+    position: relative;
+    overflow: hidden;
+
+    & > * {
+      transition: all 0.2s;
+    }
+
+    @media only screen and (max-width: $bp-smallest) {
+      margin: 2rem;
+    }
+  }
+
   &__photo {
+    // For responsive images, always put percentages for width and height
     width: 100%;
+    // Add diplay: block to remove white space from image (which happens when image is display: inline
     display: block;
+  }
+
+  &__caption {
+    font-size: 2rem;
+    color: var(--color-primary-light);
+    font-weight: 800;
+    cursor: default;
+    position: absolute;
+    left: 0;
+    top: -100%;
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(
+      to right,
+      var(--color-grey-dark-1-opaque),
+      var(--color-grey-dark-1)
+    );
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__item:hover &__caption {
+    top: 0;
+
+    // @media only screen and (max-width: $bp-smallest) {
+    //     text-align: center;
+    //     padding: 2rem;
+    // }
   }
 }
 
-//////////////////////////////
-// hoteloverview
-
+// HOTEL OVERVIEW
 .overview {
   display: flex;
   align-items: center;
-  border-bottom: var(line);
+  border-bottom: var(--line);
 
   &__heading {
     font-size: 2.25rem;
@@ -238,6 +489,7 @@
     text-transform: uppercase;
     letter-spacing: 1px;
     padding: 1.5rem 3rem;
+
     @media only screen and (max-width: $bp-small) {
       font-size: 1.8rem;
       padding: 1.25rem 2rem;
@@ -245,7 +497,9 @@
   }
 
   &__stars {
+    // Element will occupy only space that it needs (flexbox trick), and margin will occupy the rest of the space
     margin-right: auto;
+    // To remove extra space around stars, and for vertical alignment
     display: flex;
   }
 
@@ -259,7 +513,7 @@
   &__location {
     font-size: 1.2rem;
     display: flex;
-    align-items: center;
+    vertical-align: center;
   }
 
   &__icon-location {
@@ -272,54 +526,61 @@
     margin-left: 3rem;
     padding: 0 2.25rem;
     align-self: stretch;
+
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    flex-direction: column;
+
     @media only screen and (max-width: $bp-small) {
       padding: 0 1.5rem;
     }
   }
 
-  &__rating-avarage {
+  &__rating-average {
     font-size: 2.25rem;
     font-weight: 300;
-    margin-bottom: -5px;
+    margin-bottom: -3px;
+
     @media only screen and (max-width: $bp-small) {
       font-size: 1.8rem;
     }
   }
 
   &__rating-count {
-    font-size: 0.89rem;
+    font-size: 0.8rem;
     text-transform: uppercase;
+
     @media only screen and (max-width: $bp-small) {
       font-size: 0.5rem;
     }
   }
 }
 
-////////////////////////////////////////////
-// button inline
-
+// BUTTON INLINE
 .btn-inline {
   border: none;
   color: var(--color-primary);
   font-size: inherit;
+  // Border will have color of the text --color-primary
   border-bottom: 1px solid currentColor;
-  padding: 2px;
+  padding-bottom: 2px;
   display: inline-block;
   background-color: transparent;
   cursor: pointer;
   transition: all 0.2s;
 
+  // Show all button
   & span {
     margin-left: 3px;
     transition: margin-left 0.2s;
   }
 
   &:hover {
+    // On hover, border color will also update with --color-grey-dark-1 because of currentColor
     color: var(--color-grey-dark-1);
+
+    // Move arrow on 'Show all' button when hover
     span {
       margin-left: 8px;
     }
@@ -327,36 +588,41 @@
 
   &:focus {
     outline: none;
+    // Add animation - name/duration/infinite animation as long as button is focused
     animation: pulsate 1s infinite;
   }
 }
 
+// Animation for pulsating button
 @keyframes pulsate {
+  // What will happen at the beggining
   0% {
+    // No scale and no box-shadow, normal state
     transform: scale(1);
     box-shadow: none;
   }
 
+  // What will happen at the middle
   50% {
+    // A little scale
     transform: scale(1.05);
     box-shadow: 0 1rem 4rem rgba(0, 0, 0, 0.25);
   }
 
+  // What will happen at the end
   100% {
+    // Back no normal
     transform: scale(1);
     box-shadow: none;
   }
 }
 
-////////////////////////////////////////////
-// paragraph
+// PARAGRAPH
 .paragraph:not(:last-of-type) {
   margin-bottom: 2rem;
 }
 
-////////////////////////////////////////////
-// list
-
+// LIST
 .list {
   list-style: none;
   margin: 3rem 0;
@@ -372,34 +638,41 @@
     margin-bottom: 0.7rem;
   }
 
+  // Before each list__item, create small pseudo element which will contain background image
   &__item::before {
     content: "";
     display: inline-block;
     height: 1rem;
     width: 1rem;
     margin-right: 0.7rem;
-    //Older browers
+
+    // Older browsers
+    // If browser doesn't supports masks, this should happen
     background-image: url(../img/chevron-thin-right.svg);
     background-size: cover;
 
-    //Newer browsers
+    // Newer browsers - masks
+    // If browser supports masks, this should happen
     @supports (-webkit-mask-image: url()) or (mask-image: url()) {
+      // A mask defines an area where we can look through the element and see what's behind that element
+      // So the svg will have the color from background-color
       background-color: var(--color-primary);
       -webkit-mask-image: url(../img/chevron-thin-right.svg);
+      // Same like background-size: cover; adjusting the size of an image to the container
       -webkit-mask-size: cover;
       mask-image: url(../img/chevron-thin-right.svg);
       mask-size: cover;
+      // In order to work in newer browsers - gets overriden with upper background-image, and the color remains black without it
       background-image: none;
     }
   }
 }
 
-////////////////////////////////////////////
-// recommend
-
+//RECOMMEND
 .recommend {
   font-size: 1.3rem;
   color: var(--color-grey-dark-3);
+
   display: flex;
   align-items: center;
 
@@ -408,41 +681,45 @@
   }
 
   &__friends {
+    // For images to stay side by side
     display: flex;
   }
 
-  &__photos {
+  &__photo {
+    // Return box-sizing to the default, so the border will be added on top of the height and width,
+    // so the images will not change in size
     box-sizing: content-box;
     height: 4rem;
     width: 4rem;
     border-radius: 50%;
     border: 3px solid #fff;
 
-    &:not(:last-child) {
+    &:not(:last-of-type) {
       margin-right: -2rem;
     }
   }
 }
 
-////////////////////////////////////////////
-// reviews
-
+// REVIEWS
 .review {
-  background-color: white;
+  background-color: #fff;
   box-shadow: var(--shadow-light);
   padding: 3rem;
   margin-bottom: 3.5rem;
+  // In order to position the quotation mark
   position: relative;
+  // Prevent the quotation mark from overflowing outside
   overflow: hidden;
+
   @media only screen and (max-width: $bp-medium) {
     padding: 2rem;
     margin-bottom: 3rem;
   }
 
   &__text {
-    flex: 0 0 100%;
     margin-bottom: 2rem;
-    z-index: 2;
+    z-index: 10;
+    // Only for z-index to work
     position: relative;
   }
 
@@ -463,7 +740,7 @@
   }
 
   &__user-name {
-    font-size: 1rem;
+    font-size: 1.1rem;
     font-weight: 600;
     text-transform: uppercase;
     margin-bottom: 0.4rem;
@@ -481,6 +758,7 @@
   }
 
   &::before {
+    // Code for quotation mark
     content: "\201C";
     position: absolute;
     top: -2.75rem;
@@ -493,12 +771,11 @@
   }
 }
 
-////////////////////////////////////////////
 // CALL TO ACTION
-
 .cta {
   padding: 3.5rem 0;
   text-align: center;
+
   @media only screen and (max-width: $bp-medium) {
     padding: 2.5rem 0;
   }
@@ -511,12 +788,8 @@
   }
 }
 
-////////////////////////////////////////////
-// btn visible invisible
-
 .btn {
   font-size: 1.5rem;
-  border: none;
   font-weight: 300;
   text-transform: uppercase;
   border-radius: 100px;
@@ -528,24 +801,29 @@
   );
   color: #fff;
   position: relative;
+  // Button invisible is outside of visible button, so this will hide it
   overflow: hidden;
   cursor: pointer;
 
-  &__visible {
+  // Styles needed for both the visible and invisible buttons
+  & > * {
+    // Span element is inline, so it should be set to inline-block, so we can apply padding
     display: inline-block;
+    height: 100%;
+    width: 100%;
+    transition: all 0.2s;
+  }
+
+  &__visible {
     padding: 2rem 7.5rem;
-    transition: 0.2s;
   }
 
   &__invisible {
-    display: inline-block;
     position: absolute;
+    padding: 2rem 0;
     left: 0;
-    height: 100%;
-    width: 100%;
+    // This will move up the size of an element, so it will be invisible (outside of visible button)
     top: -100%;
-    padding: 2rem;
-    transition: 0.2s;
   }
 
   &:hover {
@@ -555,15 +833,54 @@
       var(--color-primary-dark)
     );
   }
+
   &:hover &__visible {
+    // Translate visible button down, 100% of its height
     transform: translateY(100%);
   }
 
   &:hover &__invisible {
+    // This will override top: -100% and return it to the position of visible
     top: 0;
   }
+
   &:focus {
     outline: none;
+    // Name of animation, 1s duration, forever
     animation: pulsate 1s infinite;
+  }
+}
+
+// AUTOCOMPLETE DROPDOWN
+.autocomplete {
+  position: relative;
+
+  &-items {
+    position: absolute;
+    border: var(--line);
+    border-bottom: none;
+    border-top: none;
+    z-index: 99;
+    top: 100%;
+    left: 4%;
+    right: 1%;
+
+    & div {
+      padding: 0.7rem 2rem;
+      cursor: pointer;
+      background-color: #fff;
+      border-bottom: var(--line);
+      transition: all 0.2s;
+
+      &:hover {
+        background-color: var(--color-grey-dark-1);
+        color: var(--color-primary);
+      }
+    }
+  }
+
+  &-active {
+    background-color: var(--color-grey-dark-1);
+    color: var(--color-primary);
   }
 }

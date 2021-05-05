@@ -1,11 +1,18 @@
 .container {
+  // max-width to enable decreasing of a container
+  // If there is enough space, width will be 120rem, if not, container will occupy 100% of space
+  // 120rem = 1200px;
   max-width: 120rem;
+  // Center container in parent (body)
   margin: 8rem auto;
   background-color: var(--color-grey-light-1);
   box-shadow: var(--shadow-dark);
+
   min-height: 50rem;
 
+  // Desktop-first starts with max-width
   @media only screen and (max-width: $bp-largest) {
+    // On this breakpoint, margin is unnecessary because the container fills the entire viewport
     margin: 0;
     max-width: 100%;
     width: 100%;
@@ -13,64 +20,88 @@
 }
 
 .header {
+  // Input will inherit font-size from here
   font-size: 1.4rem;
   height: 7rem;
   background-color: #fff;
-  border-bottom: var(line);
+  border-bottom: var(--line);
+  // Display items side by side
   display: flex;
+  // Align items on main axis
   justify-content: space-between;
+  // Align items on cross axis
   align-items: center;
+
   @media only screen and (max-width: $bp-smallest) {
+    // Wrap the row so the search bar will move to the bottom on this breakpoint
     flex-wrap: wrap;
-    height: 12rem;
     align-content: space-around;
+    height: 11rem;
   }
 }
 
 .content {
   display: flex;
+
   @media only screen and (max-width: $bp-medium) {
+    // Navigation will be on top, and the overview beneath it
     flex-direction: column;
   }
 }
 
 .sidebar {
   background-color: var(--color-grey-dark-1);
+  // 0: navigation should not grow, 0: navigation should not shrink,
+  // 18%: width of navigation
   flex: 0 0 18%;
+  // Make it flex container
   display: flex;
+  // Change direction of a main axis from top to bottom
   flex-direction: column;
+  // Push icons to top and legal paragraph to bottom
   justify-content: space-between;
 }
 
 .hotel-view {
   background-color: #fff;
+  // Element should grow as much as it can, or fill all available space
+  // (if flex is stated only with one number, it is related to flex-grow
+  // 100% - 18% (of sidebar) = 82%
   flex: 1;
 }
 
 .detail {
-  display: flex;
+  // Both description and user-reviews will inherit this font-size
   font-size: 1.4rem;
+  display: flex;
   padding: 4.5rem;
   background-color: var(--color-grey-light-1);
-  border-bottom: var(line);
+  border-bottom: var(--line);
+
   @media only screen and (max-width: $bp-medium) {
     padding: 3rem;
   }
+
   @media only screen and (max-width: $bp-small) {
+    // Change direction for this breakpoint
     flex-direction: column;
   }
 }
 
 .description {
-  flex: 0 0 60%;
-  margin-right: 4.5rem;
+  font-size: 1.4rem;
   background-color: #fff;
   box-shadow: var(--shadow-light);
   padding: 3rem;
+  // No expand, no shrink, 60% width
+  flex: 0 0 60%;
+  margin-right: 4.5rem;
+
   @media only screen and (max-width: $bp-medium) {
     padding: 2rem;
     margin-right: 3rem;
   }
+
   @media only screen and (max-width: $bp-small) {
     margin-right: 0;
     margin-bottom: 3rem;
@@ -78,9 +109,12 @@
 }
 
 .user-reviews {
+  // Take remaining space from 60%
   flex: 1;
 
   display: flex;
+  // Center 'Show all' button
   flex-direction: column;
+  // Need to change to center, because default stretch is stretching the button's border-bottom all along the container
   align-items: center;
 }
